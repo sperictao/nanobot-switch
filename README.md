@@ -49,3 +49,31 @@ nanobot-switch health start \
 - `~/.nanobot/healthcheck_runtime.json`
 - `~/.nanobot/healthcheck.log`
 
+## CI/CD 自动化
+
+仓库已内置 3 个工作流：
+
+- `.github/workflows/ci.yml`
+  - `push` / `pull_request` 到 `main` 时自动执行测试与打包校验
+- `.github/workflows/release.yml`
+  - `push` 标签 `v*`（如 `v0.1.1`）时自动构建并发布 GitHub Release，上传 wheel/sdist
+- `.github/workflows/pypi-publish.yml`
+  - 当 GitHub Release `published` 时自动发布到 PyPI
+
+## PyPI 发布配置
+
+支持两种方式，推荐第 1 种（更安全）：
+
+1. Trusted Publishing（推荐）
+   - 在 PyPI 项目里配置 GitHub OIDC Publisher：
+     - Owner: `sperictao`
+     - Repository: `nanobot-switch`
+     - Workflow: `pypi-publish.yml`
+     - Environment: `pypi`
+2. API Token（兼容方式）
+   - 在 GitHub 仓库设置 Secret：`PYPI_API_TOKEN`
+   - 可用命令：
+
+```bash
+gh secret set PYPI_API_TOKEN --repo sperictao/nanobot-switch
+```
